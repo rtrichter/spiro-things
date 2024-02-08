@@ -4,13 +4,15 @@ import time
 screen = turtle.Screen()
 
 increment = 2*np.pi/36000
-n_increments = 360*1000
+n_increments = 1000000
 center_x = 0
 center_y = 0
 
-# radii = np.array((100, 40, 15, 2, 58, 22, 82), dtype=float)
-# angles = np.array((0, 0, 0, 0, 0, 0, 0), dtype=float)
-radii = np.array((21, 40), dtype=float)
+# radii = np.array((100, 82, 28, 6), dtype=float)
+# angles = np.array((0, 0, 0, 0), dtype=float)
+# radii = np.array((21, 40), dtype=float)
+# angles = np.array((0, 0), dtype=float)
+radii = np.array((100, 22), dtype=float)
 angles = np.array((0, 0), dtype=float)
 
 def get_x(radii, angles):
@@ -36,8 +38,8 @@ turtle.down()
 
 turtle.tracer(0, 0)
 for i in range(n_increments):
-    if not i % 500:
-        print(n_increments)
+    if not i % 10000:
+        print(i)
         turtle.update()
     turtle.speed("fastest")
     turtle.setpos(center_x + get_x(radii, angles), center_y + get_y(radii, angles))

@@ -5,7 +5,7 @@ import turtle
 import time
 
 rad_per_index = 2*np.pi
-samples_per_line = 100
+samples_per_line = 1000
 RATE = 180/np.pi
 
 # test data
