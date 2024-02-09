@@ -14,10 +14,7 @@ zeros = np.zeros(inc.size)
 high = np.ones(inc.size)*20
 
 x_vec = np.hstack((inc, dec, inc, dec))
-y_vec = np.hstack((inc, high, dec, zeros))
-
-x_vec = 200*np.sin(np.linspace(0, 99, 100))
-y_vec = 200*np.cos(np.linspace(0, 99, 100))
+y_vec = np.hstack((inc, high, zeros, zeros))
 
 
 # r = np.sqrt(x**2 + y**2)
@@ -42,15 +39,15 @@ class FFT:
 
     def __init__(self, sig, domain):
         self.sig = sig
-        self.domain = domain[:domain.size//2]
+        self.domain = domain
         self.half_domain = domain[:domain.size//2]
-        self.trans = fftpack.fft(sig)[:domain.size//2]
-        # self.trans = fftpack.fft(sig)
+        # self.trans = fftpack.fft(sig)[:domain.size//2]
+        self.trans = fftpack.fft(sig)
         self.amp = np.abs(self.trans)
-        self.angle = np.angle(self.trans)[:domain.size//2]
-        # self.angle = np.angle(self.trans)
-        self.freq = fftpack.fftfreq(domain.size//2, d=domain[0]-domain[1])
-        # self.freq = fftpack.fftfreq(domain.size, d=domain[0]-domain[1])
+        # self.angle = np.angle(self.trans)[:domain.size//2]
+        self.angle = np.angle(self.trans)
+        # self.freq = fftpack.fftfreq(domain.size//2, d=domain[0]-domain[1])
+        self.freq = fftpack.fftfreq(domain.size, d=domain[0]-domain[1])
 
 
 x_fft = FFT(x_vec, n)
@@ -67,62 +64,28 @@ print(f"angle: {x_fft.angle.size}")
 
 x = []
 y = []
-# for i in range(x_fft.domain.size):
-#     x.append(0)
-#     y.append(0)
-#     for j in range(x_fft.freq.size):
-#         x[i] += x_fft.amp[j] * np.sin(x_fft.freq[j] * i + x_fft.angle[j])
-#         y[i] += y_fft.amp[j] * np.sin(x_fft.freq[j] * i + y_fft.angle[j])
+for i in range(x_fft.domain.size):
+    x.append(0)
+    y.append(0)
+    for j in range(x_fft.freq.size):
+        x[i] += x_fft.amp[j] * np.cos(x_fft.freq[j] * i * x_fft.angle[j])
+        y[i] += y_fft.amp[j] * np.sin(x_fft.freq[j] * i * y_fft.angle[j])
 
-
-def get_sig(amp, freq, domain, angle):
-    sig = x_fft.amp * np.sin(x_fft.freq * x_fft.domain * x_fft.angle)
-    return sig
-
-
-x = []
-y = []
-BOUND = 200
-for i in range(x_fft.freq.size):
-    x.append(get_sig(x_fft.amp, x_fft.freq, x_fft.domain, x_fft.angle))
-    y.append(get_sig(y_fft.amp, y_fft.freq, y_fft.domain, y_fft.angle))
-    # y.append(y_fft.amp * np.sin(y_fft.freq * y_fft.domain * y_fft.angle))
-x_coords = sum(x) / len(x)
-y_coords = sum(y) / len(x)
-
-plt.plot(x_fft.domain, x_coords)
+print(x)
+plt.figure()
+plt.plot(x_fft.domain, x)
 plt.show()
-
-x_coords *= BOUND / max(abs(x_coords))
-y_coords *= BOUND / max(abs(y_coords))
-
-
-# print(y)
-# plt.figure()
-# plt.plot(x_fft.domain, x)
-# plt.show()
-# plt.figure()
-# plt.plot(y_fft.domain, y)
-# plt.show()
-# x = np.array(x)
-# y = np.array(y)
-#
-# x *= 100 / max(abs(x))
-# y *= 100 / max(abs(y))
-# print(max(x))
-# print(max(y))
-# print(y)
+plt.figure()
+plt.plot(y_fft.domain, y)
+plt.show()
 
 turtle.up()
 turtle.setpos(0, 0)
 turtle.down()
-# for i in range(x_vec.size):
-#     turtle.setpos(x_vec[i], y_vec[i])
-for i in range(len(x_coords)):
-    print(f"({x_coords[i]}, {y_coords[i]})")
-    turtle.setpos(x_coords[i], y_coords[i])
-
-time.sleep(5)
+for i in range(x_vec.size):
+    turtle.setpos(x_vec[i], y_vec[i])
+for i in range(len(x)):
+    turtle.setpos(x[i], y[i])
 
 
 exit()
