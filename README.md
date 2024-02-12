@@ -1,4 +1,4 @@
-# Week 1 
+# Week 1 of my weekly projects
 
 Got spirograph working well. 
 
